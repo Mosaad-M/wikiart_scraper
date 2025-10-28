@@ -247,7 +247,7 @@ async def get_location(browser, art_work_url):
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
-        description="🎨 WikiArt Scraper — collect artists, artworks, and metadata."
+        description="WikiArt Scraper — collect artists, artworks, and metadata."
     )
     parser.add_argument(
         "--movement",
@@ -294,7 +294,7 @@ async def main(movement: str, export: bool):
         logger.info(f"\nTotal artists collected: {len(all_artists)}")
         logger.info(f"Total art works collected: {len(all_art_works)}")
 
-        if export == "y":
+        if export:
             file_name = f"{movement} wikiart data.json"
             data = {"artists": all_artists, "art works": all_art_works}
             with open(file_name, "w", encoding="utf-8") as f:

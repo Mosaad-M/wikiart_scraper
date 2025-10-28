@@ -10,13 +10,13 @@ def clean_name(raw_name: str) -> str :
 async def safe_goto(page, url, retries=3, delay=2):
     for attempt in range(1, retries + 1):
         try:
-            await page.goto(url, wait_until="domcontentloaded", timeout=5_000)
+            await page.goto(url, wait_until="domcontentloaded", timeout=5_000 * retries)
             return
         except Exception as e1:
             try:
                 logger.warning(f"⚠️ Attempt {attempt}/{retries} failed (domcontentloaded) for {url}: {e1}")
                 logger.info(f"Retrying with lighter wait condition...")
-                await page.goto(url, wait_until="networkidle", timeout=10_000)
+                await page.goto(url, wait_until="networkidle", timeout=10_000  * retries)
                 return
             except Exception as e2:
                 logger.warning(f"Second attempt (networkidle) failed: {e2}")
