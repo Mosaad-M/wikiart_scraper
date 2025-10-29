@@ -2,7 +2,7 @@ import asyncio
 import json
 from urllib.parse import urljoin
 from playwright.async_api import async_playwright, Browser, Page, ElementHandle, JSHandle
-from typing import List, Union
+from typing import List, Union, Dict
 import argparse
 from pydantic import Json
 from common import clean_name, safe_goto, close_popup_if_present
@@ -13,7 +13,7 @@ START_URL = f"{BASE_URL}/en/artists-by-art-movement"
 
 
 
-async def get_art_movements(browser, header_filter=None):
+async def get_art_movements(browser: Browser, header_filter:str):
     """Return all sub-period movements under a given header."""
     page: Page = await browser.new_page()
     logger.info(f"Navigating to {START_URL}...")
@@ -67,7 +67,7 @@ async def get_art_movements(browser, header_filter=None):
     return all_movements
 
 
-async def get_artists_for_movement(browser, movement):
+async def get_artists_for_movement(browser: Browser, movement):
     """Get all artists from a given movement page."""
     page: Page = await browser.new_page()
     try:
@@ -105,7 +105,7 @@ async def get_artists_for_movement(browser, movement):
         await page.close()
 
 
-async def get_works_for_artist(browser, artist):
+async def get_works_for_artist(browser: Browser, artist: Dict):
     """Get all works for an artist (with retries and safety)."""
     page: Page = await browser.new_page()
     art_works = []
@@ -228,7 +228,7 @@ async def get_works_for_artist(browser, artist):
 
 
 
-async def get_location(browser, art_work_url):
+async def get_location(browser: Browser, art_work_url: str):
     """Fetch the current location of an art work (if available)."""
     page: Page = await browser.new_page()
     try:
