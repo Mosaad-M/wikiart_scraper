@@ -265,6 +265,7 @@ def parse_args():
 
 async def main(movement: str, export: bool):
     
+    logger.info(f"Getting art works for art movement: {movement}")
 
     async with async_playwright() as p:
         browser: Browser  = await p.chromium.launch(
@@ -282,8 +283,8 @@ async def main(movement: str, export: bool):
         movements: List = await get_art_movements(browser, header_filter=movement)
         all_artists, all_art_works = [], []
 
-        for movement in movements:
-            artists: List = await get_artists_for_movement(browser, movement)
+        for mv in movements:
+            artists: List = await get_artists_for_movement(browser, mv)
             all_artists.extend(artists)
             for artist in artists:
                 art_works: List = await get_works_for_artist(browser, artist)
