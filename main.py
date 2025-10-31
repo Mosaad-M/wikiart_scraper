@@ -5,7 +5,7 @@ from playwright.async_api import async_playwright, Browser, Page, ElementHandle,
 from typing import List, Union, Dict
 import argparse
 from pydantic import Json
-from common import clean_name, safe_goto, close_popup_if_present
+from common import clean_name, load_all_artworks, safe_goto, close_popup_if_present
 from loguru import logger
 
 BASE_URL = "https://www.wikiart.org"
@@ -137,6 +137,9 @@ async def get_works_for_artist(browser: Browser, artist: Dict):
             logger.info(f"Loading all works page: {alt_url}")
             await safe_goto(page, alt_url)
             await close_popup_if_present(page)
+
+        # Ensure all works are loaded (click "LOAD MORE" until done)
+        await load_all_artworks(page)
 
         # Lazy-load by scrolling (trigger dynamic loading)
         for _ in range(8):
